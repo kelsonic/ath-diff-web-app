@@ -16,7 +16,7 @@ class Cryptos extends Component {
       error: "",
       fetching: false,
       limit: 50,
-      start: 0,
+      start: 1,
     };
   }
 
