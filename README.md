@@ -2,7 +2,7 @@
 
 # ATH Diff
 
-This web app is meant to help people find the difference between the current market price and the all-time-high price of the cryptos they find most facinating.
+This web app is meant to help people find the difference between the current market price and the all-time-high price of the cryptos they find most fascinating.
 
 ## Getting started
 

@@ -1,7 +1,8 @@
 // Node modules.
 import React, { Component } from "react";
 // Relative imports.
-import TopNav from "../../components/TopNav";
+import Cryptos from "../Cryptos";
+import TopNav from "../TopNav";
 import { Wrapper } from "./styles";
 
 class App extends Component {
@@ -9,6 +10,7 @@ class App extends Component {
     return (
       <Wrapper>
         <TopNav />
+        <Cryptos />
       </Wrapper>
     );
   }
