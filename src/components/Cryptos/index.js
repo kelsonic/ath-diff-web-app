@@ -15,8 +15,6 @@ class Cryptos extends Component {
       cryptos: [],
       error: "",
       fetching: false,
-      limit: 50,
-      start: 1,
     };
   }
 
@@ -25,31 +23,13 @@ class Cryptos extends Component {
   }
 
   fetchCryptos = async () => {
-    const { limit, start } = this.state;
-
     // Set the fetching state.
     this.setState({ fetching: true });
 
     // Fetch the cryptos.
     try {
-      const cryptos = await athDiffAPI.getCryptos({
-        limit,
-        start,
-      });
+      const cryptos = await athDiffAPI.getCryptos();
       console.log("cryptos", cryptos);
-
-      // Derive formatted cryptos.
-      // const formattedCryptos = map(cryptos, (crypto) => ({
-      //   ...crypto,
-      //   id: crypto?.asset_id,
-      //   iconURL: find(assetIcons, ['asset_id', crypto?.asset_id])?.url,
-      //   volume24Hours: crypto?.volume_1hrs_usd,
-      //   currentPriceUSD: crypto?.price_usd,
-      //   allTimeHighPriceUSD:
-      //   athDiff:
-      //   athDiffPercent:
-      //   icon: assetIcons[crypto.id],
-      // }));
 
       // Set the cryptos and our fetched state.
       this.setState({ cryptos, fetching: false });
@@ -74,25 +54,26 @@ class Cryptos extends Component {
     }
 
     return (
-      <Wrapper>
+      <Wrapper color="blue">
+        {/* Error Message */}
         {error && <p className="error">{error}</p>}
+
+        {/* List of Cryptos */}
         <ul>
           {map(cryptos, (crypto) => {
             // Derive crypto properties.
             const id = crypto?.id;
             const name = crypto?.name;
-            const iconURL = crypto?.iconURL;
-            const volume24Hours = crypto?.volume24Hours;
-            const currentPriceUSD = crypto?.currentPriceUSD;
-            const allTimeHighPriceUSD = crypto?.allTimeHighPriceUSD;
-
-            // Derive the ATH vs current price diff.
-            const athDiff = allTimeHighPriceUSD - currentPriceUSD;
-            const athDiffPercent = (athDiff / currentPriceUSD) * 100;
+            const logoURL = crypto?.logoURL;
+            const volume24Hours = crypto?.quote?.USD?.volume_24h;
+            const currentPriceUSD = crypto?.quote?.USD?.price;
+            const athPriceUSD = crypto?.athPriceUSD;
+            const athPriceDiffUSD = crypto?.athPriceDiffUSD;
+            const athPriceDiffPercent = crypto?.athPriceDiffPercent;
 
             return (
               <li key={id}>
-                <img alt={`${id} icon`} src={iconURL} />
+                <img alt={`${id} icon`} src={logoURL} />
                 <h2>
                   {crypto} <span className="crypto-id">{id}</span>
                 </h2>
@@ -120,7 +101,7 @@ class Cryptos extends Component {
                 <div className="group">
                   <p className="label">All Time High (ATH)</p>
                   <p className="value">
-                    {allTimeHighPriceUSD?.toLocaleString("en-US", {
+                    {athPriceUSD?.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
@@ -130,12 +111,12 @@ class Cryptos extends Component {
                 <div className="group">
                   <p className="label">ATH Diff</p>
                   <p className="value">
-                    {athDiff?.toLocaleString("en-US", {
+                    {athPriceDiffUSD?.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
                   </p>
-                  <p className="value">{athDiffPercent}%</p>
+                  <p className="value">{athPriceDiffPercent}%</p>
                 </div>
               </li>
             );
